@@ -1,0 +1,18 @@
+{
+    "name": "17.crmsite",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "frontend": "npm run dev --workspace=frontend",
+        "backend": "npm run dev --workspace=backend",
+        "build": "npm-run-all --parallel build:backend build:frontend",
+        "dev": "npm-run-all --parallel frontend backend"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "npm-run-all": "^4.1.5"
+    }
+}
