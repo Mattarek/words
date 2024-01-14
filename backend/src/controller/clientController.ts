@@ -1,5 +1,5 @@
 import poolDB from '../db';
-
+import { v4 as uuidv4 } from 'uuid';
 import { Request, Response } from 'express';
 import { ResultSetHeader } from 'mysql2';
 
@@ -17,11 +17,12 @@ export const getAllClients = async (req: Request, res: Response) => {
 
 export const createClient = async (req: Request, res: Response) => {
     const { name, surname, email } = req.body;
+    const uuid = uuidv4();
 
     try {
         const [result] = await poolDB.execute(
-            'INSERT INTO clients (name, surname, email) VALUES (?, ?, ?)',
-            [name, surname, email],
+            'INSERT INTO clients (uuid, name, surname, email) VALUES (?, ?, ?, ?)',
+            [uuid, name, surname, email],
         );
 
         const insertedClientId: number = (result as ResultSetHeader).insertId;
