@@ -28,21 +28,20 @@ export const createClient = async (req: Request, res: Response) => {
 
         res.status(201).json({ id: insertedClientId, name, surname, email });
     } catch (error) {
-        console.error('Error creating client:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
-export async function updateUser(req: Request, res: Response): Promise<void> {
-    const { name, surname, email, id } = req.body;
+export const updateClient = async (req: Request, res: Response) => {
+    const updatedId = req.params.id;
+    const { name, surname, email } = req.body;
 
     try {
-        const result: ResultSetHeader = await poolDB.query(
+        const [result] = await poolDB.execute<ResultSetHeader>(
             'UPDATE clients SET name = ?, surname = ?, email = ? WHERE id = ?',
-            [name, surname, email, id],
+            [name, surname, email, updatedId],
         );
-        console.log(result);
-        if (result) {
+        if (result.affectedRows === 1) {
             res.status(200).json({
                 message: 'User has been updated successfully.',
             });
@@ -52,9 +51,33 @@ export async function updateUser(req: Request, res: Response): Promise<void> {
             });
         }
     } catch (error) {
-        console.error('Error during user update:', error);
         res.status(500).json({
-            error: 'An error occurred while updating the user/',
+            error: 'An error occurred while updating the user.',
         });
     }
-}
+};
+
+export const deleteClient = async (req: Request, res: Response) => {
+    const userDeleteId = req.params.id;
+
+    try {
+        const [result] = await poolDB.execute<ResultSetHeader>(
+            'DELETE FROM clients WHERE id = ?',
+            [userDeleteId],
+        );
+        console.log(result.affectedRows);
+        if (result.affectedRows > 0) {
+            res.status(200).json({
+                message: 'User has been deleted successfully.',
+            });
+        } else {
+            res.status(404).json({
+                error: 'The user with the specified ID was not found.',
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            error: 'An error occurred while deleting the user.',
+        });
+    }
+};

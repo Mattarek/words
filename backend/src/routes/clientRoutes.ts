@@ -1,5 +1,10 @@
 import express from 'express';
-import { getAllClients, createClient, updateUser } from '../controller';
+import {
+    getAllClients,
+    createClient,
+    updateClient,
+    deleteClient,
+} from '../controller';
 
 const router = express.Router();
 
@@ -9,6 +14,7 @@ router.post('/', (req, res) => {
 });
 router.get('/clients', getAllClients);
 router.post('/clients', createClient);
-router.put('/clients', updateUser);
+router.put('/clients/:id', updateClient);
+router.delete('/clients/:id', deleteClient);
 
 export default router;
