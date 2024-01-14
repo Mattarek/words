@@ -11,7 +11,9 @@ export const getAllClients = async (req: Request, res: Response) => {
         res.json(clients);
     } catch (error) {
         console.error('Error fetching clients:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({
+            error: 'An error occurred while displaying users.',
+        });
     }
 };
 
@@ -29,7 +31,9 @@ export const createClient = async (req: Request, res: Response) => {
 
         res.status(201).json({ id: insertedClientId, name, surname, email });
     } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({
+            error: 'An error occurred while adding the user.',
+        });
     }
 };
 
