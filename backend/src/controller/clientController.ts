@@ -26,7 +26,6 @@ export const createClient = async (req: Request, res: Response) => {
             'INSERT INTO clients (uuid, name, surname, email) VALUES (?, ?, ?, ?)',
             [uuid, name, surname, email],
         );
-
         const insertedClientId: number = (result as ResultSetHeader).insertId;
 
         res.status(201).json({ id: insertedClientId, name, surname, email });
