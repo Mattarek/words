@@ -13,7 +13,7 @@ clientRouter.post('/', (req, res) => {
     res.end();
 });
 clientRouter.get('/clients', getAllClients);
-clientRouter.post('/clients', createClient);
+clientRouter.post('/client', createClient);
 clientRouter.put('/clients/:id', updateClient);
 clientRouter.delete('/clients/:id', deleteClient);
 
