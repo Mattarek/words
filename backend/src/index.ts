@@ -7,7 +7,8 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { json } from 'body-parser';
 
-import clientRoutes from './routes/clientRoutes';
+import clientRouter from './routes/clientRoutes';
+import authRouter from './routes/authRoutes';
 import poolDB from './db';
 import cors from 'cors';
 
@@ -24,14 +25,12 @@ const accessLogStream = createWriteStream(
 dotenv.config();
 app.use(express.json());
 app.use(helmet());
-const corsOptions = {
-    origin: 'http://localhost:3000',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-    optionsSuccessStatus: 204,
-};
 
-app.use(cors(corsOptions));
+const options: cors.CorsOptions = {
+    origin: process.env.FRONTEND_URL,
+};
+app.use(cors(options));
+
 app.use(
     morgan(
         '\nDate: :date[iso] \nIp: :remote-addr :remote-user \nStatus: :http-version :method :url :status :response-time ms',
@@ -44,7 +43,8 @@ app.use(
 app.use(json());
 
 // Routes
-app.use('/api', clientRoutes);
+app.use('/api', clientRouter);
+app.use('/api/auth', authRouter);
 
 // MySQL Connection
 const run = async () => {

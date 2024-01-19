@@ -18,17 +18,17 @@ export const getAllClients = async (req: Request, res: Response) => {
 };
 
 export const createClient = async (req: Request, res: Response) => {
-    const { name, surname, email } = req.body;
+    const { login, email, password } = req.body;
     const uuid = uuidv4();
 
     try {
         const [result] = await poolDB.execute(
-            'INSERT INTO clients (uuid, name, surname, email) VALUES (?, ?, ?, ?)',
-            [uuid, name, surname, email],
+            'INSERT INTO clients (uuid, login, email, password) VALUES (?, ?, ?, ?)',
+            [uuid, login, email, password],
         );
         const insertedClientId: number = (result as ResultSetHeader).insertId;
 
-        res.status(201).json({ id: insertedClientId, name, surname, email });
+        res.status(201).json({ id: insertedClientId, login, email });
     } catch (error) {
         res.status(500).json({
             error: 'An error occurred while adding the user.',

@@ -6,18 +6,18 @@ import {
     deleteClient,
 } from '../controller';
 
-const router = express.Router();
+const clientRouter = express.Router();
 
-router.post('/', (req, res) => {
+clientRouter.post('/', (req, res) => {
     console.log(req.body);
     res.end();
 });
-router.get('/clients', getAllClients);
-router.post('/clients', createClient);
-router.put('/clients/:id', updateClient);
-router.delete('/clients/:id', deleteClient);
+clientRouter.get('/clients', getAllClients);
+clientRouter.post('/clients', createClient);
+clientRouter.put('/clients/:id', updateClient);
+clientRouter.delete('/clients/:id', deleteClient);
 
-router.post('/login', (req, res) => {
+clientRouter.post('/login', (req, res) => {
     const { email, password } = req.body;
     console.log(req.body);
     if (email === 'przykladowy@email.com' && password === 'tajnehaslo') {
@@ -29,4 +29,4 @@ router.post('/login', (req, res) => {
     }
 });
 
-export default router;
+export default clientRouter;
