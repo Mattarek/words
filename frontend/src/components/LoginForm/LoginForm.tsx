@@ -1,72 +1,161 @@
-import { useFormik } from 'formik';
 import styles from './LoginForm.module.css';
-interface IError {
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-}
+import { useState } from 'react';
+import { useFormik, Formik } from 'formik';
+import * as Yup from 'yup';
 
-interface IEvent extends Event {
-    firstName: string;
-    lastName: string;
-    email: string;
-}
-
-interface IInitialValues {
-    firstName: string;
-    lastName: string;
-    email: string;
-}
-
-const validate = (values: IEvent) => {
-    const errors: IError = {};
-    if (!values.firstName) {
-        errors.firstName = 'Required';
-    } else if (values.firstName.length > 15) {
-        errors.firstName = 'Must be 15 characters or less';
-    }
-
-    if (!values.lastName) {
-        errors.lastName = 'Required';
-    } else if (values.lastName.length > 20) {
-        errors.lastName = 'Must be 20 characters or less';
-    }
-
-    if (!values.email) {
-        errors.email = 'Required';
-    } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
-        errors.email = 'Invalid email address';
-    }
-
-    return errors;
-};
 interface Type {
     [n: string]: number;
 }
-
 export const LoginForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const spans = Array.from({ length: 50 }, (_, index) => index);
+
+    const formik = useFormik({
+        initialValues: {
+            email: 'przykladowy@email.com',
+            password: 'tajnehaslooooooooo',
+        },
+        validationSchema: Yup.object({
+            email: Yup.string()
+                .email('Invalid email address')
+                .required('Required'),
+            password: Yup.string().required('Required'),
+        }),
+        onSubmit: async (values) => {
+            try {
+                const response = await fetch(
+                    'http://localhost:3001/api/login',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(values),
+                    },
+                );
+                console.log(values);
+                const data = await response.json();
+
+                if (data.success) {
+                    console.log('Zalogowano pomyślnie');
+                } else {
+                    console.log('Błąd logowania:', data.message);
+                }
+            } catch (error) {
+                console.error('Wystąpił błąd:', error);
+            }
+        },
+    });
 
     return (
         <div className={styles.container}>
-            <div className={styles.loginBox}>
+            <Formik
+                initialValues={{ firstName: '', lastName: '', email: '' }}
+                validationSchema={Yup.object({
+                    firstName: Yup.string()
+                        .max(15, 'Must be 15 characters or less')
+                        .required('Required'),
+
+                    lastName: Yup.string()
+                        .max(20, 'Must be 20 characters or less')
+                        .required('Required'),
+
+                    email: Yup.string()
+                        .email('Invalid email address')
+                        .required('Required'),
+                })}
+                onSubmit={async (values, { setSubmitting }) => {
+                    const response = await fetch(
+                        'http://localhost:3001/api/login',
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(values),
+                        },
+                    );
+                    console.log(values);
+                    const data = await response.json();
+                    console.log(data);
+                }}>
+                {(formik) => (
+                    <form onSubmit={formik.handleSubmit}>
+                        <label htmlFor='firstName'>First Name</label>
+
+                        <input
+                            id='firstName'
+                            type='text'
+                            {...formik.getFieldProps('firstName')}
+                        />
+
+                        {formik.touched.firstName && formik.errors.firstName ? (
+                            <div>{formik.errors.firstName}</div>
+                        ) : null}
+
+                        <label htmlFor='lastName'>Last Name</label>
+
+                        <input
+                            id='lastName'
+                            type='text'
+                            {...formik.getFieldProps('lastName')}
+                        />
+
+                        {formik.touched.lastName && formik.errors.lastName ? (
+                            <div>{formik.errors.lastName}</div>
+                        ) : null}
+
+                        <label htmlFor='email'>Email Address</label>
+
+                        <input
+                            id='email'
+                            type='email'
+                            {...formik.getFieldProps('email')}
+                        />
+
+                        {formik.touched.email && formik.errors.email ? (
+                            <div>{formik.errors.email}</div>
+                        ) : null}
+
+                        <button
+                            type='button'
+                            onClick={formik.handleSubmit}>
+                            Submit
+                        </button>
+                    </form>
+                )}
+            </Formik>
+            {/* <div className={styles.loginBox}>
                 <h2>Login</h2>
-                <form action='#'>
+                <form onSubmit={formik.handleSubmit}>
                     <div className={styles['input-box']}>
                         <input
                             type='email'
+                            placeholder='E-mail'
+                            onChange={formik.handleChange}
+                            value={formik.values.email}
                             required
                         />
-                        <label>Email</label>
+                        <label htmlFor='email'>
+                            {formik.values.email ? '' : <p>E-mail</p>}
+                        </label>
+                        {formik.touched.email && formik.errors.email ? (
+                            <p>{formik.errors.email}</p>
+                        ) : null}
                     </div>
                     <div className={styles['input-box']}>
                         <input
                             type='password'
+                            placeholder='Password'
+                            onChange={formik.handleChange}
+                            value={formik.values.password}
                             required
                         />
                         <label>Password</label>
+                        {formik.touched.password && formik.errors.password ? (
+                            <div>{formik.errors.password}</div>
+                        ) : null}
                     </div>
                     <div className={styles['forgot-pass']}>
                         <a href='#'>Forgot your password?</a>
@@ -80,16 +169,18 @@ export const LoginForm = () => {
                         <a href='#'>Signup</a>
                     </div>
                 </form>
+            </div> */}
+            <div>
+                {spans.map((index) => {
+                    const type: Type = { '--i': index };
+                    return (
+                        <span
+                            key={index}
+                            className={styles.animatedElement}
+                            style={type}></span>
+                    );
+                })}
             </div>
-            {spans.map((index) => {
-                const type: Type = { '--i': index };
-                return (
-                    <span
-                        key={index}
-                        className={styles.animatedElement}
-                        style={type}></span>
-                );
-            })}
         </div>
     );
 };

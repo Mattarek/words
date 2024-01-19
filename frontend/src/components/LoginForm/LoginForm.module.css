@@ -21,6 +21,10 @@ body {
     align-items: center;
 }
 
+.error {
+    color: red;
+}
+
 .animatedElement {
     position: absolute;
     left: 0;
@@ -29,9 +33,9 @@ body {
     background: #2c4766;
     border-radius: 8px;
     transform-origin: 128px;
-    transform: scale(2.2) rotate(calc(var(--i) * (360deg / 50)));
+    transform: scale(2.2) rotate(calc(var(--i) * (360deg / 75)));
     animation: animateBlink 3s linear infinite;
-    animation-delay: calc(var(--i) * (3s / 50));
+    animation-delay: calc(var(--i) * (2s / 50));
 }
 
 @keyframes animateBlink {
@@ -51,7 +55,7 @@ body {
     padding: 0 50px;
 }
 h2 {
-    font-size: 2em;
+    font-size: 3rem;
     color: #0ef;
     text-align: center;
 }

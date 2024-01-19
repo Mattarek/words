@@ -9,6 +9,7 @@ import { json } from 'body-parser';
 
 import clientRoutes from './routes/clientRoutes';
 import poolDB from './db';
+import cors from 'cors';
 
 const app = express();
 const port = process.env.PORT || 3001;
