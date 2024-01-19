@@ -3,10 +3,14 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
+    "workspaces": [
+        "frontend",
+        "backend"
+    ],
     "scripts": {
         "frontend": "npm run dev --workspace=frontend",
         "backend": "npm run dev --workspace=backend",
-        "build": "npm-run-all --parallel build:backend build:frontend",
+        "build": "npm-run-all --parallel dev:backend dev:frontend",
         "dev": "npm-run-all --parallel frontend backend"
     },
     "keywords": [],

@@ -20,8 +20,7 @@ body {
     justify-content: center;
     align-items: center;
 }
-
-.animatedElement {
+.container span {
     position: absolute;
     left: 0;
     width: 32px;
@@ -33,7 +32,6 @@ body {
     animation: animateBlink 3s linear infinite;
     animation-delay: calc(var(--i) * (3s / 50));
 }
-
 @keyframes animateBlink {
     0% {
         background: #0ef;
@@ -97,7 +95,7 @@ h2 {
     margin: -15px 0 10px;
     text-align: center;
 }
-.forgot-pass a {
+.forgot-passa {
     font-size: 0.85em;
     color: #fff;
     text-decoration: none;
