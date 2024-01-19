@@ -24,7 +24,14 @@ const accessLogStream = createWriteStream(
 dotenv.config();
 app.use(express.json());
 app.use(helmet());
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
 
+app.use(cors(corsOptions));
 app.use(
     morgan(
         '\nDate: :date[iso] \nIp: :remote-addr :remote-user \nStatus: :http-version :method :url :status :response-time ms',
