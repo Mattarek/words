@@ -12,18 +12,22 @@ interface IUser extends RowDataPacket {
 }
 export const logInUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-
+    console.log(req.body);
     try {
-        const [userFound] = await poolDB.execute<IUser[]>(
-            'SELECT * FROM clients WHERE email = ? AND password = ?',
-            [email, password],
-        );
-
-        res.status(200).json({
-            login: userFound[0].login,
-            email: userFound[0].email,
-            password: userFound[0].password,
-        });
+        if (req.body) {
+            const [userFound] = await poolDB.execute<IUser[]>(
+                'SELECT * FROM clients WHERE email = ? AND password = ?',
+                [email, password],
+            );
+            console.log(userFound);
+            res.status(200).json({
+                email: userFound[0].email,
+                password: userFound[0].password,
+            });
+            res.status(404).json({
+                error: 'User not exist.',
+            });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({

@@ -10,19 +10,22 @@ export const LoginForm = () => {
 
     const formik = useFormik({
         initialValues: {
-            email: 'przykladowy@email.com',
-            password: 'tajnehaslooooooooo',
+            email: '',
+            password: '',
         },
+
         validationSchema: Yup.object({
             email: Yup.string()
                 .email('Invalid email address')
                 .required('Required'),
             password: Yup.string().required('Required'),
         }),
+
         onSubmit: async (values) => {
+            console.log(`Values: ${[values]}`);
             try {
                 const response = await fetch(
-                    'http://localhost:3001/api/login',
+                    'http://localhost:3001/api/auth/login',
                     {
                         method: 'POST',
                         headers: {
@@ -53,7 +56,7 @@ export const LoginForm = () => {
                     <div className={styles['input-box']}>
                         <input
                             type='email'
-                            placeholder='E-mail'
+                            name='email'
                             onChange={formik.handleChange}
                             value={formik.values.email}
                             required
@@ -61,20 +64,20 @@ export const LoginForm = () => {
                         <label htmlFor='email'>
                             {formik.values.email ? '' : <p>E-mail</p>}
                         </label>
-                        {formik.touched.email && formik.errors.email ? (
+                        {formik.touched.email ? (
                             <p>{formik.errors.email}</p>
                         ) : null}
                     </div>
                     <div className={styles['input-box']}>
                         <input
                             type='password'
-                            placeholder='Password'
+                            name='password'
                             onChange={formik.handleChange}
                             value={formik.values.password}
                             required
                         />
                         <label>Password</label>
-                        {formik.touched.password && formik.errors.password ? (
+                        {formik.touched.password ? (
                             <div>{formik.errors.password}</div>
                         ) : null}
                     </div>
