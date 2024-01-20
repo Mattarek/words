@@ -2,6 +2,7 @@ import styles from './LoginForm.module.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 
 export const LoginForm = () => {
     const formik = useFormik({
@@ -19,13 +20,25 @@ export const LoginForm = () => {
 
         onSubmit: async (values) => {
             try {
-                await fetch('http://localhost:3001/api/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
+                const response = await fetch(
+                    'http://localhost:3001/api/auth/login',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(values),
                     },
-                    body: JSON.stringify(values),
-                });
+                );
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const { accessToken } = data;
+                    localStorage.setItem('accessToken', accessToken);
+                    return redirect('/dashboard');
+                } else {
+                    console.error('Wystąpił błąd podczas logowania');
+                }
             } catch (error) {
                 console.error('Wystąpił błąd:', error);
             }
@@ -33,8 +46,8 @@ export const LoginForm = () => {
     });
 
     return (
-        <div className={styles.container}>
-            <div className={styles.loginBox}>
+        <div className={styles['container']}>
+            <div className={styles['login-box']}>
                 <h2>Login</h2>
                 <form onSubmit={formik.handleSubmit}>
                     <div className={styles['input-box']}>
@@ -62,7 +75,9 @@ export const LoginForm = () => {
                         />
                         <label>Password</label>
                         {formik.touched.password ? (
-                            <div>{formik.errors.password}</div>
+                            <div className={styles.error}>
+                                {formik.errors.password}
+                            </div>
                         ) : null}
                     </div>
                     <div className={styles['forgot-pass']}>

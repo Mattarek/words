@@ -18,6 +18,10 @@ const router = createBrowserRouter([
         element: <RegisterForm />,
     },
     {
+        path: '/dashboard',
+        //element: <Dashboard/>
+    },
+    {
         path: '*',
         element: (
             <Navigate

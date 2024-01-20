@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -14,37 +13,11 @@ body {
 }
 .container {
     position: relative;
-    width: 256px;
-    height: 256px;
+    width: 350px;
+    height: 350px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.error {
-    color: red;
-}
-
-.animatedElement {
-    position: absolute;
-    left: 0;
-    width: 16px;
-    height: 6px;
-    background: #2c4766;
-    border-radius: 8px;
-    transform-origin: 174px;
-    transform: scale(2.2) rotate(calc(var(--i) * (360deg / 75)));
-    animation: animateBlink 3s linear infinite;
-    animation-delay: calc(var(--i) * (3s / 50));
-}
-
-@keyframes animateBlink {
-    0% {
-        background: #0ef;
-    }
-    25% {
-        background: #2c4766;
-    }
 }
 .login-box {
     position: absolute;
@@ -79,6 +52,7 @@ h2 {
 .input-box input:valid {
     border-color: #0ef;
 }
+
 .input-box label {
     position: absolute;
     top: 50%;
@@ -97,18 +71,6 @@ h2 {
     padding: 0 6px;
     color: #0ef;
 }
-.forgot-pass {
-    margin: -15px 0 10px;
-    text-align: center;
-}
-.forgot-pass a {
-    font-size: 0.85em;
-    color: #fff;
-    text-decoration: none;
-}
-.forgot-pass a:hover {
-    text-decoration: underline;
-}
 .btn {
     width: 100%;
     height: 45px;
@@ -121,6 +83,19 @@ h2 {
     color: #1f293a;
     font-weight: 600;
 }
+.forgot-pass {
+    margin: -15px 0 10px;
+    text-align: center;
+}
+.forgot-pass a {
+    font-size: 0.85em;
+    color: #fff;
+    text-decoration: none;
+}
+.forgot-pass a:hover {
+    text-decoration: underline;
+}
+
 .signup-link {
     margin: 20px 0 10px;
     text-align: center;

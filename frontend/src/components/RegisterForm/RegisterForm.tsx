@@ -35,8 +35,8 @@ export const RegisterForm = () => {
     });
 
     return (
-        <div className={styles.container}>
-            <div className={styles.loginBox}>
+        <div className={styles['container']}>
+            <div className={styles['login-box']}>
                 <h2>Register</h2>
                 <form onSubmit={formik.handleSubmit}>
                     <div className={styles['input-box']}>

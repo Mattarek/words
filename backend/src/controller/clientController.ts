@@ -2,6 +2,7 @@ import poolDB from '../db';
 import { v4 as uuidv4 } from 'uuid';
 import { Request, Response } from 'express';
 import { ResultSetHeader } from 'mysql2';
+import bcrypt from 'bcrypt';
 
 export const getAllClients = async (req: Request, res: Response) => {
     try {
@@ -22,10 +23,15 @@ export const createClient = async (req: Request, res: Response) => {
     const uuid = uuidv4();
 
     try {
+        const saltRounds = 10;
+        const salt = await bcrypt.genSalt(saltRounds);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
         const [result] = await poolDB.execute(
             'INSERT INTO clients (uuid, login, email, password) VALUES (?, ?, ?, ?)',
-            [uuid, login, email, password],
+            [uuid, login, email, hashedPassword],
         );
+
         const insertedClientId: number = (result as ResultSetHeader).insertId;
 
         res.status(201).json({ id: insertedClientId, login, email });
