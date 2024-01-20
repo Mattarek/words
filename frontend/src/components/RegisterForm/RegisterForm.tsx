@@ -19,14 +19,15 @@ export const RegisterForm = () => {
             password: Yup.string().required('Required'),
         }),
 
-        onSubmit: async (values) => {
+        onSubmit: async ({ email, login, password }) => {
+            console.log({ login, email, password });
             try {
-                await fetch('http://localhost:3001/api/auth/login', {
+                await fetch('http://localhost:3001/api/client', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(values),
+                    body: JSON.stringify({ login, email, password }),
                 });
             } catch (error) {
                 console.error('Wystąpił błąd:', error);
@@ -63,7 +64,7 @@ export const RegisterForm = () => {
                             required
                         />
                         <label htmlFor='login'>
-                            {formik.values.email ? '' : <p>Login</p>}
+                            {formik.values.login ? '' : <p>Login</p>}
                         </label>
                         {formik.touched.email ? (
                             <p>{formik.errors.email}</p>
@@ -84,7 +85,7 @@ export const RegisterForm = () => {
                     </div>
                     <div className={styles['input-box']}>
                         <input
-                            type='repeatPassword'
+                            type='password'
                             name='repeatPassword'
                             onChange={formik.handleChange}
                             value={formik.values.repeatPassword}

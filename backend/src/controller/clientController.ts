@@ -3,6 +3,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { Request, Response } from 'express';
 import { ResultSetHeader } from 'mysql2';
 import bcrypt from 'bcrypt';
+import { RowDataPacket } from 'mysql2';
+
+interface IUser extends RowDataPacket {
+    id: number;
+    uuid: string;
+    login: string;
+    email: string;
+    password: string;
+}
 
 export const getAllClients = async (req: Request, res: Response) => {
     try {
@@ -23,19 +32,36 @@ export const createClient = async (req: Request, res: Response) => {
     const uuid = uuidv4();
 
     try {
+        const [userFound] = await poolDB.execute<IUser[]>(
+            'SELECT * FROM clients WHERE email = ?',
+            [email],
+        );
+
+        if (userFound.length > 0) {
+            return res.status(401).json({
+                error: 'Email already exists.',
+            });
+        }
+
         const saltRounds = 10;
         const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(password, salt);
+        console.log('1');
 
-        const [result] = await poolDB.execute(
+        const result = (await poolDB.execute(
             'INSERT INTO clients (uuid, login, email, password) VALUES (?, ?, ?, ?)',
             [uuid, login, email, hashedPassword],
-        );
+        )) as any;
 
-        const insertedClientId: number = (result as ResultSetHeader).insertId;
+        if (result[0].affectedRows) {
+            return res
+                .status(201)
+                .json({ message: 'Client created successfully!' });
+        }
 
-        res.status(201).json({ id: insertedClientId, login, email });
+        return res.status(500).json({ message: 'Something went wrong!' });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             error: 'An error occurred while adding the user.',
         });
