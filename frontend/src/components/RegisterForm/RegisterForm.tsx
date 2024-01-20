@@ -1,18 +1,15 @@
-import styles from './LoginForm.module.css';
+import styles from './RegisterForm.module.css';
 import { useFormik } from 'formik';
+import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 
-interface Type {
-    [n: string]: number;
-}
 export const RegisterForm = () => {
-    const spans = Array.from({ length: 50 }, (_, index) => index);
-
     const formik = useFormik({
         initialValues: {
             email: '',
             login: '',
             password: '',
+            repeatPassword: '',
         },
 
         validationSchema: Yup.object({
@@ -40,7 +37,7 @@ export const RegisterForm = () => {
     return (
         <div className={styles.container}>
             <div className={styles.loginBox}>
-                <h2>Login</h2>
+                <h2>Register</h2>
                 <form onSubmit={formik.handleSubmit}>
                     <div className={styles['input-box']}>
                         <input
@@ -65,8 +62,8 @@ export const RegisterForm = () => {
                             value={formik.values.login}
                             required
                         />
-                        <label htmlFor='email'>
-                            {formik.values.email ? '' : <p>E-mail</p>}
+                        <label htmlFor='login'>
+                            {formik.values.email ? '' : <p>Login</p>}
                         </label>
                         {formik.touched.email ? (
                             <p>{formik.errors.email}</p>
@@ -85,29 +82,31 @@ export const RegisterForm = () => {
                             <div>{formik.errors.password}</div>
                         ) : null}
                     </div>
+                    <div className={styles['input-box']}>
+                        <input
+                            type='repeatPassword'
+                            name='repeatPassword'
+                            onChange={formik.handleChange}
+                            value={formik.values.repeatPassword}
+                            required
+                        />
+                        <label>Confirm password</label>
+                        {formik.touched.password ? (
+                            <div>{formik.errors.password}</div>
+                        ) : null}
+                    </div>
                     <div className={styles['forgot-pass']}>
                         <a href='#'>Forgot your password?</a>
                     </div>
                     <button
                         type='submit'
                         className={styles.btn}>
-                        Login
+                        Register
                     </button>
                     <div className={styles['signup-link']}>
-                        <a href='#'>Signup</a>
+                        <Link to='/login'>Signin</Link>
                     </div>
                 </form>
-            </div>
-            <div>
-                {spans.map((index) => {
-                    const type: Type = { '--i': index };
-                    return (
-                        <span
-                            key={index}
-                            className={styles.animatedElement}
-                            style={type}></span>
-                    );
-                })}
             </div>
         </div>
     );

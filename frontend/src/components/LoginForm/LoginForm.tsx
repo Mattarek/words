@@ -1,13 +1,9 @@
 import styles from './LoginForm.module.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
 
-interface Type {
-    [n: string]: number;
-}
 export const LoginForm = () => {
-    const spans = Array.from({ length: 50 }, (_, index) => index);
-
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -78,20 +74,9 @@ export const LoginForm = () => {
                         Login
                     </button>
                     <div className={styles['signup-link']}>
-                        <a href='#'>Signup</a>
+                        <Link to='/register'>Signup</Link>
                     </div>
                 </form>
-            </div>
-            <div>
-                {spans.map((index) => {
-                    const type: Type = { '--i': index };
-                    return (
-                        <span
-                            key={index}
-                            className={styles.animatedElement}
-                            style={type}></span>
-                    );
-                })}
             </div>
         </div>
     );
