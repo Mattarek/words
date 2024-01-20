@@ -22,7 +22,6 @@ export const LoginForm = () => {
         }),
 
         onSubmit: async (values) => {
-            console.log(`Values: ${[values]}`);
             try {
                 const response = await fetch(
                     'http://localhost:3001/api/auth/login',
@@ -34,14 +33,9 @@ export const LoginForm = () => {
                         body: JSON.stringify(values),
                     },
                 );
-                console.log(values);
-                const data = await response.json();
 
-                if (data.success) {
-                    console.log('Zalogowano pomyślnie');
-                } else {
-                    console.log('Błąd logowania:', data.message);
-                }
+                // const data = await response.json();
+                // console.log(data);
             } catch (error) {
                 console.error('Wystąpił błąd:', error);
             }
