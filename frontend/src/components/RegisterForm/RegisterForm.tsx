@@ -5,12 +5,13 @@ import * as Yup from 'yup';
 interface Type {
     [n: string]: number;
 }
-export const LoginForm = () => {
+export const RegisterForm = () => {
     const spans = Array.from({ length: 50 }, (_, index) => index);
 
     const formik = useFormik({
         initialValues: {
             email: '',
+            login: '',
             password: '',
         },
 
@@ -47,6 +48,21 @@ export const LoginForm = () => {
                             name='email'
                             onChange={formik.handleChange}
                             value={formik.values.email}
+                            required
+                        />
+                        <label htmlFor='email'>
+                            {formik.values.email ? '' : <p>E-mail</p>}
+                        </label>
+                        {formik.touched.email ? (
+                            <p>{formik.errors.email}</p>
+                        ) : null}
+                    </div>
+                    <div className={styles['input-box']}>
+                        <input
+                            type='login'
+                            name='login'
+                            onChange={formik.handleChange}
+                            value={formik.values.login}
                             required
                         />
                         <label htmlFor='email'>
