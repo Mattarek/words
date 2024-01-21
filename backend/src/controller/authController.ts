@@ -20,15 +20,25 @@ export const logInUser = async (req: Request, res: Response) => {
             [email],
         );
 
-        const isMatch = await bcrypt.compare(password, userFound[0].password);
-        if (isMatch) {
+        const passwordIsMatch = await bcrypt.compare(
+            password,
+            userFound[0].password,
+        );
+        if (passwordIsMatch) {
             const accessToken = jwt.sign(
                 userFound[0].email,
-                process.env.JWT_SECRET as string,
+                process.env.JWT_ACCESS_SECRET as string,
+                { expiresIn: 1200 },
+            );
+            const refreshToken = jwt.sign(
+                userFound[0].email,
+                process.env.JWT_REFRESH_SECRET as string,
+                { expiresIn: 300 },
             );
             res.status(200).json({
                 message: 'You have successfully logged in!',
                 accessToken,
+                refreshToken,
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
