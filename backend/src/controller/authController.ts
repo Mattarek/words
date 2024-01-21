@@ -26,14 +26,14 @@ export const logInUser = async (req: Request, res: Response) => {
         );
         if (passwordIsMatch) {
             const accessToken = jwt.sign(
-                userFound[0].email,
+                { email: userFound[0].email },
                 process.env.JWT_ACCESS_SECRET as string,
-                { expiresIn: 1200 },
+                { expiresIn: 60 * 60 },
             );
             const refreshToken = jwt.sign(
-                userFound[0].email,
+                { email: userFound[0].email },
                 process.env.JWT_REFRESH_SECRET as string,
-                { expiresIn: 300 },
+                { expiresIn: 60 * 160 },
             );
             res.status(200).json({
                 message: 'You have successfully logged in!',

@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 
@@ -42,9 +43,24 @@ app.use(
 
 app.use(json());
 
+const authenticate = (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+) => {
+    const authHeader = req.header['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token === null) return res.sendStatus(401);
+    jwt.verify(token, process.env.JWT_ACCESS_SECRET as string, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+};
+
 // Routes
 app.use('/api', clientRouter);
-app.use('/api/auth', authRouter);
+app.use('/api/auth', authenticate, authRouter);
 
 // MySQL Connection
 const run = async () => {
